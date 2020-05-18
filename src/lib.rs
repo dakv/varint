@@ -1,6 +1,5 @@
-const MSB: u8 = 0b10000000;
-const DROP_MSB: u8 = 0b01111111;
-
+const MSB: u8 = 0b1000_0000;
+const DROP_MSB: u8 = 0b0111_1111;
 
 #[inline]
 fn required_encoded_space_unsigned(mut v: u64) -> usize {
@@ -93,7 +92,7 @@ mod test {
         let mut value = 1u32;
         while value < std::u32::MAX / 10 {
             value *= 10;
-//            println!("{}", value);
+            //            println!("{}", value);
             let v = value.encode_varint();
             let (result, _) = u32::decode_varint(&v);
             assert_eq!(result, value);
@@ -105,7 +104,7 @@ mod test {
         let mut value = std::u32::MAX as u64;
         while value < std::u64::MAX / 10 {
             value *= 10;
-//            println!("{}", value);
+            //            println!("{}", value);
             let v = value.encode_varint();
             let (result, _) = u64::decode_varint(&v);
             assert_eq!(result, value);
