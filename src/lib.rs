@@ -1,4 +1,5 @@
 const MSB: u8 = 0b1000_0000;
+const MSB_U64: u64 = 0b1000_0000;
 const DROP_MSB: u8 = 0b0111_1111;
 
 #[inline]
@@ -19,8 +20,7 @@ pub trait EncodeVar: Sized + Copy {
     fn required_size(self) -> usize;
     fn real_encode(self, dst: &mut [u8]);
     fn encode_varint(self) -> Vec<u8> {
-        let mut v = Vec::new();
-        v.resize(self.required_size(), 0);
+        let mut v = vec![0; self.required_size()];
         self.real_encode(&mut v);
         v
     }
@@ -32,10 +32,9 @@ impl EncodeVar for u64 {
         required_encoded_space_unsigned(self)
     }
     fn real_encode(self, v: &mut [u8]) {
-        assert!(v.len() >= self.required_size());
         let mut i = 0;
         let mut t = self;
-        while t >= MSB as u64 {
+        while t >= MSB_U64 {
             v[i] = t as u8 & (MSB - 1) | MSB;
             i += 1;
             t >>= 7;
@@ -92,7 +91,6 @@ mod test {
         let mut value = 1u32;
         while value < std::u32::MAX / 10 {
             value *= 10;
-            //            println!("{}", value);
             let v = value.encode_varint();
             let (result, _) = u32::decode_varint(&v);
             assert_eq!(result, value);
@@ -101,10 +99,9 @@ mod test {
 
     #[test]
     fn test_var_u64() {
-        let mut value = std::u32::MAX as u64;
+        let mut value = 1u64;
         while value < std::u64::MAX / 10 {
             value *= 10;
-            //            println!("{}", value);
             let v = value.encode_varint();
             let (result, _) = u64::decode_varint(&v);
             assert_eq!(result, value);
