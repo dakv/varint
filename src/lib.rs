@@ -92,7 +92,9 @@ mod test {
         while value < std::u32::MAX / 10 {
             value *= 10;
             let v = value.encode_varint();
-            let (result, _) = u32::decode_varint(&v);
+            let expected_len = v.len();
+            let (result, l) = u32::decode_varint(&v);
+            assert_eq!(l, expected_len);
             assert_eq!(result, value);
         }
     }
@@ -103,7 +105,9 @@ mod test {
         while value < std::u64::MAX / 10 {
             value *= 10;
             let v = value.encode_varint();
-            let (result, _) = u64::decode_varint(&v);
+            let expected_len = v.len();
+            let (result, l) = u64::decode_varint(&v);
+            assert_eq!(l, expected_len);
             assert_eq!(result, value);
         }
     }
