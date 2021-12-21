@@ -1,0 +1,12 @@
+[package]
+name = "dakv_varint"
+version = "0.1.1"
+authors = ["dkkb <dabkb@aol.com>"]
+edition = "2018"
+description = "varint"
+license = "MIT"
+homepage = "https://github.com/dakv/varint"
+keywords = ["varint"]
+categories = ["varint"]
+
+[dependencies]
